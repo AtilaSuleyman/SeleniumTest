@@ -7,7 +7,7 @@ import org.openqa.selenium.chrome.ChromeDriver;
 /**
  * Created by Administrator on 04/09/2017.
  */
-public class AutoTest {
+public class AutoTestBasic {
 
     WebDriver driver;
 
@@ -26,4 +26,5 @@ public class AutoTest {
     public void testOne(){
         driver.navigate().to("http://www.qa.com");
     }
+
 }
