@@ -7,6 +7,7 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
+import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.FluentWait;
 import org.openqa.selenium.support.ui.Wait;
 
@@ -37,13 +38,13 @@ public class Intermediate {
 
     @Before
     public void setUp() {
-        //driver = new ChromeDriver();
+        driver = new ChromeDriver();
     }
 
     @After
     public void tearDown() {
         //Closes the webpage and processes
-        driver.quit();
+        //driver.quit();
     }
 
     @AfterClass
@@ -124,6 +125,7 @@ public class Intermediate {
             Thread.sleep(1000);
 
             try {
+System.out.println("hello my friend");
                 assertEquals(row.get(3), driver.findElement(By.xpath("/html/body/table/tbody/tr/td[1]/big/blockquote/blockquote/font/center/b")).getText());
                 extentTest.log(Status.INFO, "Info level message to show information that allows a NON-TECHNICAL" +
                         " person to understand what the test is doing");
@@ -140,5 +142,46 @@ public class Intermediate {
                 driver.quit();
             }
         }
+    }
+
+    @Test
+    public void mouseDrag(){
+        driver.navigate().to("http://demoqa.com/draggable/");
+        WebElement n = driver.findElement(By.id("draggable"));
+        Actions builder = new Actions(driver);
+        builder.moveByOffset(400,360).clickAndHold().moveByOffset(300,300).release().perform();
+    }
+
+    @Test
+    public void mouseDragIntoBox(){
+        driver.navigate().to("http://demoqa.com/droppable/");
+        WebElement whiteBox = driver.findElement(By.id("draggableview"));
+        WebElement greyBox = driver.findElement(By.id("droppableview"));
+        Actions builder = new Actions(driver);
+        builder.dragAndDrop(whiteBox, greyBox).perform();
+    }
+
+    @Test
+    public void resizeBox(){
+        Resizeable pomr = new Resizeable(driver);
+        driver.navigate().to("http://demoqa.com/resizable/");
+        WebElement line = pomr.getLineToDrag();
+        Actions builder = new Actions(driver);
+        builder.dragAndDropBy(line, 300,200).perform();
+    }
+
+    @Test
+    public void selectBoxes(){
+        Selectable poms = new Selectable(driver);
+        driver.navigate().to("http://demoqa.com/selectable/");
+        WebElement boxOne = poms.getFirstItem();
+        WebElement boxTwo = poms.getSecondItem();
+        WebElement boxThree = poms.getThirdItem();
+        WebElement boxFour = poms.getFourthItem();
+        WebElement boxFifth = poms.getFifthItem();
+        WebElement boxSix = poms.getSixthItem();
+        WebElement boxSeven = poms.getSeventhItem();
+        Actions builder = new Actions(driver);
+        builder.dragAndDrop(boxOne, boxOne).perform();
     }
 }
