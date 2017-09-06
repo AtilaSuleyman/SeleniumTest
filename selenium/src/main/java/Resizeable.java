@@ -10,6 +10,9 @@ public class Resizeable {
 
     WebDriver driver;
 
+    @FindBy(xpath = "//*[@id=\"resizable\"]/div[3]")
+    WebElement lineToDrag;
+
     public Resizeable(WebDriver driver){
 
         this.driver = driver;
@@ -18,9 +21,6 @@ public class Resizeable {
 
         PageFactory.initElements(driver, this);
     }
-
-    @FindBy(xpath = "//*[@id=\"resizable\"]/div[3]")
-    WebElement lineToDrag;
 
     public WebElement getLineToDrag() {
         return lineToDrag;

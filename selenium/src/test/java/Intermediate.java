@@ -2,9 +2,7 @@ import com.aventstack.extentreports.ExtentTest;
 import com.aventstack.extentreports.Status;
 import com.google.common.base.Function;
 import org.junit.*;
-import org.openqa.selenium.By;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
+import org.openqa.selenium.*;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.interactions.Actions;
@@ -18,6 +16,8 @@ import java.util.NoSuchElementException;
 
 import static java.util.concurrent.TimeUnit.SECONDS;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotEquals;
+import static org.junit.Assert.assertTrue;
 
 /**
  * Created by Administrator on 04/09/2017.
@@ -44,7 +44,7 @@ public class Intermediate {
     @After
     public void tearDown() {
         //Closes the webpage and processes
-        //driver.quit();
+        driver.quit();
     }
 
     @AfterClass
@@ -125,7 +125,6 @@ public class Intermediate {
             Thread.sleep(1000);
 
             try {
-System.out.println("hello my friend");
                 assertEquals(row.get(3), driver.findElement(By.xpath("/html/body/table/tbody/tr/td[1]/big/blockquote/blockquote/font/center/b")).getText());
                 extentTest.log(Status.INFO, "Info level message to show information that allows a NON-TECHNICAL" +
                         " person to understand what the test is doing");
@@ -149,7 +148,11 @@ System.out.println("hello my friend");
         driver.navigate().to("http://demoqa.com/draggable/");
         WebElement n = driver.findElement(By.id("draggable"));
         Actions builder = new Actions(driver);
+        System.out.println(n.getLocation());
         builder.moveByOffset(400,360).clickAndHold().moveByOffset(300,300).release().perform();
+        System.out.println(n.getLocation());
+        assertEquals(n.getLocation().getX()-300, 264);
+        assertEquals(n.getLocation().getY()-300, 339);
     }
 
     @Test
@@ -159,6 +162,7 @@ System.out.println("hello my friend");
         WebElement greyBox = driver.findElement(By.id("droppableview"));
         Actions builder = new Actions(driver);
         builder.dragAndDrop(whiteBox, greyBox).perform();
+        assertEquals(greyBox.getText(), "Dropped!");
     }
 
     @Test
@@ -166,12 +170,16 @@ System.out.println("hello my friend");
         Resizeable pomr = new Resizeable(driver);
         driver.navigate().to("http://demoqa.com/resizable/");
         WebElement line = pomr.getLineToDrag();
+        WebElement box = driver.findElement(By.id("resizable"));
         Actions builder = new Actions(driver);
+        Dimension pastD = box.getSize();
         builder.dragAndDropBy(line, 300,200).perform();
+        assertNotEquals(box.getSize(), pastD);
     }
 
     @Test
     public void selectBoxes(){
+        int cntr = 0;
         Selectable poms = new Selectable(driver);
         driver.navigate().to("http://demoqa.com/selectable/");
         WebElement boxOne = poms.getFirstItem();
@@ -181,7 +189,28 @@ System.out.println("hello my friend");
         WebElement boxFifth = poms.getFifthItem();
         WebElement boxSix = poms.getSixthItem();
         WebElement boxSeven = poms.getSeventhItem();
+        List<WebElement> childs = poms.getDescendants();
         Actions builder = new Actions(driver);
-        builder.dragAndDrop(boxOne, boxOne).perform();
+        System.out.println(childs.size());
+        builder.dragAndDrop(boxOne, boxTwo).perform();
+        for (WebElement e: childs) {
+            if(e.getAttribute("class").equals("ui-widget-content ui-corner-left ui-selectee ui-selected")){
+                cntr++;
+            }
+        }
+        assertTrue(cntr == 2);
     }
+
+    @Test
+    public void reorderBox() throws InterruptedException {
+        Sortable pomSort = new Sortable(driver);
+        driver.navigate().to("http://demoqa.com/sortable/");
+        WebElement sortBoxOne = pomSort.getSortableBoxOne();
+        WebElement sortBoxFour = pomSort.getSortableBoxFour();
+        Point p4 = sortBoxFour.getLocation();
+        Actions builder = new Actions(driver);
+        builder.dragAndDropBy(sortBoxOne,0,100).perform();
+        assertEquals(driver.findElement(By.xpath("//*[@id=\"sortable\"]/li[4]")).getText(),"Item 1");
+    }
+
 }

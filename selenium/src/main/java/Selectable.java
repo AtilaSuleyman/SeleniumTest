@@ -1,7 +1,10 @@
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
+
+import java.util.List;
 
 /**
  * Created by Administrator on 05/09/2017.
@@ -31,6 +34,9 @@ public class Selectable {
     @FindBy(xpath = "//*[@id=\"selectable\"]/li[7]")
     WebElement seventhItem;
 
+    @FindBy(id = "selectable")
+    WebElement selectable;
+
     public Selectable(WebDriver driver){
 
         this.driver = driver;
@@ -39,6 +45,8 @@ public class Selectable {
 
         PageFactory.initElements(driver, this);
     }
+
+    public WebElement getSelectable() {return selectable;}
 
     public WebElement getFirstItem() {
         return firstItem;
@@ -66,5 +74,10 @@ public class Selectable {
 
     public WebElement getSeventhItem() {
         return seventhItem;
+    }
+
+    public List<WebElement> getDescendants(){
+        List<WebElement> childs = selectable.findElements(By.className("ui-selectee"));
+        return childs;
     }
 }
