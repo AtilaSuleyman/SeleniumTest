@@ -6,6 +6,8 @@ import org.openqa.selenium.*;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.interactions.Actions;
+import org.openqa.selenium.support.ui.ExpectedCondition;
+import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.FluentWait;
 import org.openqa.selenium.support.ui.Wait;
 
@@ -26,6 +28,7 @@ public class Intermediate {
 
     WebDriver driver;
     private static ExtentReportManager reportManager;
+    Wait<WebDriver> wait;
 
     @BeforeClass
     public static void init() {
@@ -39,6 +42,8 @@ public class Intermediate {
     @Before
     public void setUp() {
         driver = new ChromeDriver();
+        wait = new FluentWait<WebDriver>(driver).withTimeout(30, SECONDS).pollingEvery(5, SECONDS)
+                .ignoring(NoSuchElementException.class);
     }
 
     @After
@@ -163,6 +168,7 @@ public class Intermediate {
         Actions builder = new Actions(driver);
         builder.dragAndDrop(whiteBox, greyBox).perform();
         assertEquals(greyBox.getText(), "Dropped!");
+
     }
 
     @Test
