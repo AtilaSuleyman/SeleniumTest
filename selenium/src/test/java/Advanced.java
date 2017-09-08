@@ -49,7 +49,7 @@ public class Advanced {
     @After
     public void tearDown() {
         //Closes the webpage and processes
-        //driver.quit();
+        driver.quit();
     }
 
     @AfterClass
@@ -104,6 +104,7 @@ public class Advanced {
             String imagePath = ScreenShot.take(driver, "image");
             extentTest.log(Status.INFO, "Info level message to show information that allows a NON-TECHNICAL" +
                     " person to understand what the test is doing");
+            extentTest.log(Status.INFO, "added emu.");
             extentTest.pass("Passed");
         } catch (IOException e) {
             String details = "Training.Example Failing test: " + e.getMessage();
@@ -222,7 +223,15 @@ public class Advanced {
         selectionBox.click();
         selectionBox.sendKeys("Customer service");
         selectionBox.click();
-
+        WebElement emailBox = pom.getEmailBox();
+        emailBox.sendKeys("adsf@hotmail.co.uk");
+        WebElement orderReference = pom.getOrderReference();
+        orderReference.sendKeys("A0NM7B");
+        WebElement messageBox = pom.getTextBox();
+        messageBox.sendKeys("Nice day");
+        WebElement submitMessage = pom.getSubmitMessage();
+        submitMessage.click();
+        assertEquals(driver.findElement(By.xpath("//*[@id=\"center_column\"]/p")).getText(), "Your message has been successfully sent to our team.");
 //        try {
 //            assertTrue(driver.getTitle().equalsIgnoreCase("Contact us - My Store"));
 //            String imagePath = ScreenShot.take(driver, "image");

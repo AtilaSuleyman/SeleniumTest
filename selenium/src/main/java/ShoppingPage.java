@@ -45,6 +45,15 @@ public class ShoppingPage {
     @FindBy(xpath = "//*[@id=\"email\"]")
     WebElement emailBox;
 
+    @FindBy(xpath = "//*[@id=\"id_order\"]")
+    WebElement orderReference;
+
+    @FindBy(xpath = "//*[@id=\"message\"]")
+    WebElement textBox;
+
+    @FindBy(xpath = "//*[@id=\"submitMessage\"]")
+    WebElement submitMessage;
+
     public ShoppingPage(WebDriver driver){
         this.driver = driver;
         //Initialise web elements for a certain driver
@@ -93,5 +102,17 @@ public class ShoppingPage {
 
     public WebElement getEmailBox() {
         return emailBox;
+    }
+
+    public WebElement getOrderReference() {
+        return orderReference;
+    }
+
+    public WebElement getTextBox() {
+        return textBox;
+    }
+
+    public WebElement getSubmitMessage() {
+        return submitMessage;
     }
 }
